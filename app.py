@@ -1,5 +1,6 @@
 
 
+
 import plotly.express as px
 from shiny.express import input, ui
 from shinywidgets import render_plotly
@@ -53,14 +54,14 @@ with ui.sidebar(open="open"):
 with ui.h2("Data Grid"):
     @render.data_frame
     def penguins_data_grid():
-        return render.DataGrid(penguins_df, height=150,)
+        return render.DataGrid(filtered_data(), height=150,)
 
 # Data Table
 with ui.accordion(id="acc", open="closed"):
     with ui.accordion_panel("Data Table"):
         @render.data_frame
         def penguin_data_table():
-            return render.DataTable(penguins_df, height=100)
+            return render.DataTable(filtered_data(), height=100)
 
 # Plotly Histogram
 with ui.navset_card_tab(id="tab"):
@@ -68,7 +69,7 @@ with ui.navset_card_tab(id="tab"):
         @render_plotly
         def plotly_histogram():
             plotly_hist = px.histogram(
-                data_frame=penguins_df,
+                data_frame=filtered_data(),
                 x=input.selected_attribute(),
                 nbins=input.plotly_bin_count(),
                 color="species"
@@ -84,7 +85,7 @@ with ui.navset_card_tab(id="tab"):
         @render.plot
         def seaborn_histogram():
             seaborn_hist = sns.histplot(
-                data=penguins_df,
+                data=filtered_data(),
                 x=input.selected_attribute(),
                 bins=input.seaborn_bin_count(),
             )
@@ -123,6 +124,7 @@ with ui.navset_card_tab(id="tab"):
     @reactive.calc
     def filtered_data():
         return penguins_df[penguins_df["species"].isin(input.selected_species_list())]
+
 
 
 
