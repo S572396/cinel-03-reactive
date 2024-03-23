@@ -88,30 +88,29 @@ with ui.navset_card_tab(id="tab"):
                 data=filtered_data(),
                 x=input.selected_attribute(),
                 bins=input.seaborn_bin_count(),
+                hue="species",
+                hue_order=input.selected_species_list(),
+                legend=True
             )
             seaborn_hist.set_title("Seaborn Penguin Data")
-            seaborn_hist.set_xlabel("Selected Attribute")
             seaborn_hist.set_ylabel("Count")
             return seaborn_hist
 
 # Plotly Scatterplot
-    with ui.nav_panel("Plotly Scatterplot"):
-        ui.card_header("Plotly Scatter Plot Species")
-
+    with ui.nav_panel("Species Plotly Scatterplot"):
         @render_plotly
         def plotly_scatterplot():
-            plotly_scatter = px.scatter(
-                penguins_df,
-                x="bill_depth_mm",
-                y="bill_length_mm",
-                color="species",
-                size_max=8,
-                labels={
-                    "bill_depth_mm": "Bill Depth(mm)",
-                    "bill_length_mm": "Bill Length(mm)"
-                }
+            scatter = px.scatter(
+                filtered_data(),
+                title="Species Scatterplot",
+                x=input.selected_attribute(),
+                color= "species"
+    
+                
+               
             )
-            return plotly_scatter
+            return scatter
+                
 # --------------------------------------------------------
 # Reactive calculations and effects
 # --------------------------------------------------------
@@ -124,6 +123,5 @@ with ui.navset_card_tab(id="tab"):
     @reactive.calc
     def filtered_data():
         return penguins_df[penguins_df["species"].isin(input.selected_species_list())]
-
 
 
