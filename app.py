@@ -65,7 +65,7 @@ with ui.accordion(id="acc", open="closed"):
 
 # Plotly Histogram
 with ui.navset_card_tab(id="tab"):
-    with ui.nav_panel("Plotly Penguin Histogram"):
+    with ui.nav_panel("Plotly Species Histogram"):
         @render_plotly
         def plotly_histogram():
             plotly_hist = px.histogram(
@@ -74,14 +74,14 @@ with ui.navset_card_tab(id="tab"):
                 nbins=input.plotly_bin_count(),
                 color="species"
             ).update_layout(
-                title="Plotly Penguins Data",
+                title="Plotly Species Data",
                 xaxis_title="Selected Attribute",
                 yaxis_title="Count"
             )
             return plotly_hist
 
 # Seaborn Histogram
-    with ui.nav_panel("Seaborn Histogram"):
+    with ui.nav_panel("Species Seaborn Histogram"):
         @render.plot
         def seaborn_histogram():
             seaborn_hist = sns.histplot(
@@ -92,7 +92,7 @@ with ui.navset_card_tab(id="tab"):
                 hue_order=input.selected_species_list(),
                 legend=True
             )
-            seaborn_hist.set_title("Seaborn Penguin Data")
+            seaborn_hist.set_title("Species Penguin Data")
             seaborn_hist.set_ylabel("Count")
             return seaborn_hist
 
@@ -102,7 +102,7 @@ with ui.navset_card_tab(id="tab"):
         def plotly_scatterplot():
             scatter = px.scatter(
                 filtered_data(),
-                title="Species Scatterplot",
+                title="Species Penguin Scatterplot",
                 x=input.selected_attribute(),
                 color= "species"
     
@@ -123,5 +123,3 @@ with ui.navset_card_tab(id="tab"):
     @reactive.calc
     def filtered_data():
         return penguins_df[penguins_df["species"].isin(input.selected_species_list())]
-
-
